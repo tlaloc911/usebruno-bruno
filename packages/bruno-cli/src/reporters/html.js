@@ -5,7 +5,6 @@ const xmlFormatter = require('xml-formatter');
 const makeHtmlOutput = async (results, outputPath) => {
 
     results.results.forEach(result => {
-		console.log(result)
 	  if (result.request.headers.hasOwnProperty('Authorization')) {
 
 		result.request.headers.Authorization = '*****';
