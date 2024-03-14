@@ -337,6 +337,16 @@
           >
             <pre>{{result.response.data}}</pre>
           </n-card>
+
+          </n-card>
+		  
+		      <n-card
+            v-if="result.response.data"
+            title="RESPONSE BODY BEAUTY"
+          >
+            <pre>{{result.response.beautydata}}</pre>
+          </n-card>
+      
           <n-card title="ASSERTIONS INFORMATION">
             <n-data-table
               :columns="assertionsColumns"
