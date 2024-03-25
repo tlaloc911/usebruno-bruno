@@ -41,6 +41,28 @@ const QueryResultPreview = ({
   };
 
   switch (previewTab) {
+    case 'raw': {
+      var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+
+      let escaped_data = data.replace(/[&<>"']/g, function (m) {
+        return map[m];
+      });
+
+      const webViewSrc =
+        ' <style>.long-string { word-wrap: break-word; } </style><p class ="long-string">' + escaped_data + '</p>';
+      //"<b>diff<b/>"
+      return (
+        <StyledWrapper>
+          <div className="pb-4 w-full" dangerouslySetInnerHTML={{ __html: webViewSrc }} />
+        </StyledWrapper>
+      );
+    }
     case 'preview-web': {
       const webViewSrc = data.replace('<head>', `<head><base href="${item.requestSent?.url || ''}">`);
       return (
@@ -66,7 +88,7 @@ const QueryResultPreview = ({
       );
     }
     default:
-    case 'raw': {
+    case 'code': {
       return (
         <CodeEditor
           collection={collection}

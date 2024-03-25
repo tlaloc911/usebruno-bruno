@@ -59,7 +59,7 @@ const QueryResult = ({ item, collection, data, dataBuffer, width, disableRunEven
 
   const allowedPreviewModes = useMemo(() => {
     // Always show raw
-    const allowedPreviewModes = ['raw'];
+    const allowedPreviewModes = ['code', 'raw'];
 
     if (mode.includes('html') && typeof data === 'string') {
       allowedPreviewModes.unshift('preview-web');
