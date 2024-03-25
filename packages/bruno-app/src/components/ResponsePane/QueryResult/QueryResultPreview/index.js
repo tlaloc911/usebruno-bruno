@@ -7,6 +7,8 @@ import { useState } from 'react';
 import 'pdfjs-dist/build/pdf.worker';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
+import StyledWrapper from 'components/MarkDown/StyledWrapper';
+import { diff_match_patch } from 'components/DiffMatchPatch/diff_match_patch';
 
 const QueryResultPreview = ({
   previewTab,
@@ -41,6 +43,17 @@ const QueryResultPreview = ({
   };
 
   switch (previewTab) {
+    case 'diff-preview': {
+      var dmp = new diff_match_patch();
+      var diff = dmp.diff_main(item.request.docs, data);
+      var pretty_diff = dmp.diff_prettyHtml(d);
+      const webViewSrc = '<pre>' + pretty_diff + '</pre>';
+      return (
+        <StyledWrapper>
+          <div className="pb-4 w-full" dangerouslySetInnerHTML={{ __html: pretty_diff }} />
+        </StyledWrapper>
+      );
+    }
     case 'preview-web': {
       const webViewSrc = data.replace('<head>', `<head><base href="${item.requestSent?.url || ''}">`);
       return (

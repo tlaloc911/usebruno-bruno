@@ -61,6 +61,10 @@ const QueryResult = ({ item, collection, data, dataBuffer, width, disableRunEven
     // Always show raw
     const allowedPreviewModes = ['raw'];
 
+    if (item.request.docs && item.request.docs.trim() != '') {
+      allowedPreviewModes.unshift('diff-preview');
+    }
+
     if (mode.includes('html') && typeof data === 'string') {
       allowedPreviewModes.unshift('preview-web');
     } else if (mode.includes('image')) {
