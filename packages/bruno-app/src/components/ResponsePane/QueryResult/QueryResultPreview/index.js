@@ -46,7 +46,7 @@ const QueryResultPreview = ({
     case 'diff-preview': {
       var dmp = new diff_match_patch();
       var diff = dmp.diff_main(item.request.docs, data);
-      var pretty_diff = dmp.diff_prettyHtml(d);
+      var pretty_diff = dmp.diff_prettyHtml(diff);
       const webViewSrc = '<pre>' + pretty_diff + '</pre>';
       return (
         <StyledWrapper>
