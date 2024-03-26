@@ -61,7 +61,7 @@ const QueryResult = ({ item, collection, data, dataBuffer, width, disableRunEven
     // Always show raw
     const allowedPreviewModes = ['raw'];
 
-    if (item.request.docs && item.request.docs.trim() != '') {
+    if (item.request && item.request.docs && item.request.docs.trim() != '') {
       allowedPreviewModes.unshift('diff-preview');
     }
 
