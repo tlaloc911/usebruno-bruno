@@ -44,15 +44,21 @@ const QueryResultPreview = ({
 
   switch (previewTab) {
     case 'diff-preview': {
-      var dmp = new diff_match_patch();
-      var diff = dmp.diff_main(item.request.docs, data);
-      var pretty_diff = dmp.diff_prettyHtml(diff);
-      const webViewSrc = '<pre>' + pretty_diff + '</pre>';
-      return (
-        <StyledWrapper>
-          <div className="pb-4 w-full" dangerouslySetInnerHTML={{ __html: pretty_diff }} />
-        </StyledWrapper>
-      );
+      var pretty_diff = '';
+      if (typeof formattedData === 'string' || formattedData instanceof String) {
+        try {
+          var dmp = new diff_match_patch();
+          var diff = dmp.diff_main(item.request.docs, formattedData);
+          pretty_diff = dmp.diff_prettyHtml(diff);
+        } catch (e) {
+          pretty_diff = '<h1>Unable to show diff</h1>';
+        }
+        return (
+          <StyledWrapper>
+            <div className="pb-4 w-full" dangerouslySetInnerHTML={{ __html: pretty_diff }} />
+          </StyledWrapper>
+        );
+      }
     }
     case 'preview-web': {
       const webViewSrc = data.replace('<head>', `<head><base href="${item.requestSent?.url || ''}">`);
