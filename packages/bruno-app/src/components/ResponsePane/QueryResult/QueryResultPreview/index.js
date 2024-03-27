@@ -50,7 +50,7 @@ const QueryResultPreview = ({
         "'": '&#039;'
       };
 
-      let escaped_data = '';
+      let escaped_data = 'Unable to show Raw';
       if (typeof data === 'string' || data instanceof String) {
         escaped_data = data.replace(/[&<>"']/g, function (m) {
           return map[m];
