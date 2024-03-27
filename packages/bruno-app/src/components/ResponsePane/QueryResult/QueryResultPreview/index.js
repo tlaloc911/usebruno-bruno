@@ -50,9 +50,16 @@ const QueryResultPreview = ({
         "'": '&#039;'
       };
 
-      let escaped_data = data.replace(/[&<>"']/g, function (m) {
-        return map[m];
-      });
+      let escaped_data = '';
+      if (typeof data === 'string' || data instanceof String) {
+        escaped_data = data.replace(/[&<>"']/g, function (m) {
+          return map[m];
+        });
+      } else if (typeof formattedData === 'string' || formattedData instanceof String) {
+        escaped_data = formattedData.replace(/[&<>"']/g, function (m) {
+          return map[m];
+        });
+      }
 
       const webViewSrc =
         ' <style>.long-string { word-wrap: break-word; } </style><p class ="long-string">' + escaped_data + '</p>';
