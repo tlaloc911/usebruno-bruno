@@ -12,14 +12,14 @@ const Wrapper = styled.div`
     }
   }
 
- li {
-     display: flex;
-     align-items: center;
-     border: 1px solid ${(props) => props.theme.text};
-     border-radius: 5px;
-     padding-inline: 5px;
-     background: ${(props) => props.theme.sidebar.bg};
- }
+  li {
+    display: flex;
+    align-items: center;
+    border: 1px solid ${(props) => props.theme.text};
+    border-radius: 5px;
+    padding-inline: 5px;
+    background: ${(props) => props.theme.sidebar.bg};
+  }
 `;
 
 export default Wrapper;

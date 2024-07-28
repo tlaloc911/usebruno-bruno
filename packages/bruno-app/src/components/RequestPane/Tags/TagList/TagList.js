@@ -39,13 +39,13 @@ const TagList = ({ tags, onTagRemove, onTagAdd }) => {
       <ul className="flex flex-wrap gap-1">
         {tags && tags.length
           ? tags.map((_tag) => (
-            <li key={_tag}>
-              <span>{_tag}</span>
-              <button tabIndex={-1} onClick={() => onTagRemove(_tag)}>
-                <IconX strokeWidth={1.5} size={20} />
-              </button>
-            </li>
-          ))
+              <li key={_tag}>
+                <span>{_tag}</span>
+                <button tabIndex={-1} onClick={() => onTagRemove(_tag)}>
+                  <IconX strokeWidth={1.5} size={20} />
+                </button>
+              </li>
+            ))
           : null}
       </ul>
       {isEditing ? (

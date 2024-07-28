@@ -1767,7 +1767,7 @@ export const collectionsSlice = createSlice({
           item.draft.request.tags = item.draft.request.tags.filter((t) => t !== tag.trim());
         }
       }
-    },
+    }
   }
 });
 
