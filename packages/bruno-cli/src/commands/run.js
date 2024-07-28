@@ -302,6 +302,10 @@ const builder = async (yargs) => {
     .example(
       '$0 run folder --cacert myCustomCA.pem --ignore-truststore',
       'Use a custom CA certificate exclusively when validating the peers of the requests in the specified folder.'
+    )
+    .example(
+      '$0 run folder --tags=hello,world --exclude-tags=skip',
+      'Run only requests with tags "hello" or "world" and exclude any request with tag "skip".'
     );
 };
 
