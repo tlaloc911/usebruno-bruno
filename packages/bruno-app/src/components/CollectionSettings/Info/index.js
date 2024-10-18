@@ -1,9 +1,9 @@
 import React from 'react';
 import StyledWrapper from './StyledWrapper';
-import { getTotalRequestCountInCollection } from 'utils/collections/';
+import { getRequestsInfoInCollection } from 'utils/collections/';
 
 const Info = ({ collection }) => {
-  const totalRequestsInCollection = getTotalRequestCountInCollection(collection);
+  const [ totalRequestsInCollection, tagListsCollection ] = getRequestsInfoInCollection(collection);
 
   return (
     <StyledWrapper className="w-full flex flex-col h-full">
@@ -30,6 +30,10 @@ const Info = ({ collection }) => {
             <td className="py-2 px-2 text-right">Requests&nbsp;:</td>
             <td className="py-2 px-2">{totalRequestsInCollection}</td>
           </tr>
+          <tr className="">
+            <td className="py-2 px-2 text-right">Tags&nbsp;:</td>
+            <td className="py-2 px-2">{tagListsCollection.join(',')}</td>
+          </tr>                    
         </tbody>
       </table>
     </StyledWrapper>

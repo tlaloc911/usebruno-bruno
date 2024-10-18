@@ -817,17 +817,26 @@ const getPathParams = (item) => {
   return pathParams;
 };
 
-export const getTotalRequestCountInCollection = (collection) => {
+export const getRequestsInfoInCollection = (collection) => {
   let count = 0;
+  let subfolder_tags = null
+  let subfolder_count = 0
+  const uniqueTags = new Set();
   each(collection.items, (item) => {
     if (isItemARequest(item)) {
       count++;
+      if ( Array.isArray(item.request.tags)) {
+        item.request.tags.forEach(tag => uniqueTags.add(tag)); // Add tags to the Set
+      }
     } else if (isItemAFolder(item)) {
-      count += getTotalRequestCountInCollection(item);
+      [subfolder_count,subfolder_tags] = getRequestsInfoInCollection(item);
+      count += subfolder_count;
+      subfolder_tags.forEach(tag => uniqueTags.add(tag)); 
     }
-  });
 
-  return count;
+  });
+  
+  return [count,Array.from(uniqueTags)];
 };
 
 export const getAllVariables = (collection, item) => {
