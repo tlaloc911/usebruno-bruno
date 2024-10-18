@@ -5,7 +5,7 @@ import Modal from 'components/Modal';
 import { useDispatch } from 'react-redux';
 import { addTab } from 'providers/ReduxStore/slices/tabs';
 import { runCollectionFolder } from 'providers/ReduxStore/slices/collections/actions';
-import { flattenItems } from 'utils/collections';
+import { flattenItems, getRequestsInfoInCollection } from 'utils/collections';
 import StyledWrapper from './StyledWrapper';
 import TagList from 'components/RequestPane/Tags/TagList/TagList';
 
@@ -14,6 +14,7 @@ const RunCollectionItem = ({ collection, item, onClose }) => {
 
   const [tags, setTags] = useState({ include: [], exclude: [] });
   const [tagsEnabled, setTagsEnabled] = useState(false);
+  const [totalRequestsInCollection, tagListsCollection ] = getRequestsInfoInCollection (item);
 
   const onSubmit = (recursive) => {
     dispatch(
@@ -54,7 +55,9 @@ const RunCollectionItem = ({ collection, item, onClose }) => {
               <span className="ml-1 text-xs">({recursiveRunLength} requests)</span>
             </div>
             <div className="mb-8">This will run all the requests in this folder and all its subfolders.</div>
-
+            <div className="mb-8">
+              Tags in your folder: <span className="font-medium">{tagListsCollection.join(',')}</span>
+            </div>
             <div className="mb-8 flex flex-col">
               <div className="flex gap-2">
                 <label className="block font-medium">Filter requests with tags</label>

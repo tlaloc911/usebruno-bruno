@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { get, cloneDeep } from 'lodash';
 import { runCollectionFolder, cancelRunnerExecution } from 'providers/ReduxStore/slices/collections/actions';
 import { resetCollectionRunner } from 'providers/ReduxStore/slices/collections';
-import { findItemInCollection, getTotalRequestCountInCollection } from 'utils/collections';
+import { findItemInCollection, getRequestsInfoInCollection  } from 'utils/collections';
 import { IconRefresh, IconCircleCheck, IconCircleX, IconCheck, IconX, IconRun } from '@tabler/icons';
 import slash from 'utils/common/slash';
 import ResponsePane from './ResponsePane';
@@ -109,7 +109,7 @@ export default function RunnerResults({ collection }) {
     dispatch(cancelRunnerExecution(runnerInfo.cancelTokenUid));
   };
 
-  const totalRequestsInCollection = getTotalRequestCountInCollection(collectionCopy);
+  const [totalRequestsInCollection, tagListsCollection ] = getRequestsInfoInCollection (collectionCopy);
   const passedRequests = items.filter((item) => {
     return item.status !== 'error' && item.testStatus === 'pass' && item.assertionStatus === 'pass';
   });
@@ -127,7 +127,6 @@ export default function RunnerResults({ collection }) {
         <div className="mt-6">
           You have <span className="font-medium">{totalRequestsInCollection}</span> requests in this collection.
         </div>
-
         <div className="mt-6">
           <label>Delay (in ms)</label>
           <input
@@ -141,6 +140,9 @@ export default function RunnerResults({ collection }) {
             onChange={(e) => setDelay(e.target.value)}
           />
         </div>
+        <div className="mt-6">
+          Tags in your collection: <span className="font-medium">{tagListsCollection.join(',')}</span>
+        </div>        
         <div className="mt-6 flex flex-col">
           <div className="flex gap-2">
             <label className="block font-medium">Filter requests with tags</label>
