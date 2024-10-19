@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { get, cloneDeep } from 'lodash';
 import { runCollectionFolder, cancelRunnerExecution } from 'providers/ReduxStore/slices/collections/actions';
 import { resetCollectionRunner } from 'providers/ReduxStore/slices/collections';
-import { findItemInCollection, getRequestsInfoInCollection  } from 'utils/collections';
+import { findItemInCollection, getRequestsInfoInCollection } from 'utils/collections';
 import { IconRefresh, IconCircleCheck, IconCircleX, IconCheck, IconX, IconRun } from '@tabler/icons';
 import slash from 'utils/common/slash';
 import ResponsePane from './ResponsePane';
@@ -109,7 +109,7 @@ export default function RunnerResults({ collection }) {
     dispatch(cancelRunnerExecution(runnerInfo.cancelTokenUid));
   };
 
-  const [totalRequestsInCollection, tagListsCollection ] = getRequestsInfoInCollection (collectionCopy);
+  const [totalRequestsInCollection, tagListsCollection] = getRequestsInfoInCollection(collectionCopy);
   const passedRequests = items.filter((item) => {
     return item.status !== 'error' && item.testStatus === 'pass' && item.assertionStatus === 'pass';
   });
@@ -140,9 +140,6 @@ export default function RunnerResults({ collection }) {
             onChange={(e) => setDelay(e.target.value)}
           />
         </div>
-        <div className="mt-6">
-          Tags in your collection: <span className="font-medium">{tagListsCollection.join(',')}</span>
-        </div>        
         <div className="mt-6 flex flex-col">
           <div className="flex gap-2">
             <label className="block font-medium">Filter requests with tags</label>
@@ -154,22 +151,30 @@ export default function RunnerResults({ collection }) {
             />
           </div>
           {tagsEnabled && (
-            <div className="flex p-4 gap-4 max-w-xl justify-between">
-              <div className="w-1/2">
-                <span>Included tags:</span>
-                <TagList
-                  tags={tags.include}
-                  onTagAdd={(tag) => setTags({ ...tags, include: [...tags.include, tag] })}
-                  onTagRemove={(tag) => setTags({ ...tags, include: tags.include.filter((t) => t !== tag) })}
-                />
+            <div>
+              <div className="mt-6">
+                Tags in your collection: <span className="font-medium">{tagListsCollection.join(',')}</span>
               </div>
-              <div className="w-1/2">
-                <span>Excluded tags:</span>
-                <TagList
-                  tags={tags.exclude}
-                  onTagAdd={(tag) => setTags({ ...tags, exclude: [...tags.exclude, tag] })}
-                  onTagRemove={(tag) => setTags({ ...tags, exclude: tags.exclude.filter((t) => t !== tag) })}
-                />
+              <div className="flex p-4 gap-4 max-w-xl justify-between">
+
+                <div className="w-1/2">
+                  <span>Included tags:</span>
+                  <TagList
+                    tags={tags.include}
+                    onTagAdd={(tag) => setTags({ ...tags, include: [...tags.include, tag] })}
+                    onTagRemove={(tag) => setTags({ ...tags, include: tags.include.filter((t) => t !== tag) })}
+                    suggestions={tagListsCollection}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <span>Excluded tags:</span>
+                  <TagList
+                    tags={tags.exclude}
+                    onTagAdd={(tag) => setTags({ ...tags, exclude: [...tags.exclude, tag] })}
+                    onTagRemove={(tag) => setTags({ ...tags, exclude: tags.exclude.filter((t) => t !== tag) })}
+                    suggestions={tagListsCollection}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -242,23 +247,23 @@ export default function RunnerResults({ collection }) {
                   <ul className="pl-8">
                     {item.testResults
                       ? item.testResults.map((result) => (
-                          <li key={result.uid}>
-                            {result.status === 'pass' ? (
-                              <span className="test-success flex items-center">
-                                <IconCheck size={18} strokeWidth={2} className="mr-2" />
+                        <li key={result.uid}>
+                          {result.status === 'pass' ? (
+                            <span className="test-success flex items-center">
+                              <IconCheck size={18} strokeWidth={2} className="mr-2" />
+                              {result.description}
+                            </span>
+                          ) : (
+                            <>
+                              <span className="test-failure flex items-center">
+                                <IconX size={18} strokeWidth={2} className="mr-2" />
                                 {result.description}
                               </span>
-                            ) : (
-                              <>
-                                <span className="test-failure flex items-center">
-                                  <IconX size={18} strokeWidth={2} className="mr-2" />
-                                  {result.description}
-                                </span>
-                                <span className="error-message pl-8 text-xs">{result.error}</span>
-                              </>
-                            )}
-                          </li>
-                        ))
+                              <span className="error-message pl-8 text-xs">{result.error}</span>
+                            </>
+                          )}
+                        </li>
+                      ))
                       : null}
                     {item.assertionResults?.map((result) => (
                       <li key={result.uid}>

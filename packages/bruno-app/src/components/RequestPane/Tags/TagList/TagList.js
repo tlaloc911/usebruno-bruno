@@ -3,19 +3,33 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import StyledWrapper from './StyledWrapper';
 
-const TagList = ({ tags, onTagRemove, onTagAdd }) => {
+const TagList = ({ tags, onTagRemove, onTagAdd, suggestions }) => {
   const tagNameRegex = /^[\w-]+$/;
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState('');
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [isSuggestionVisible, setIsSuggestionVisible] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleChange = (e) => {
-    setText(e.target.value);
+	  const userInput = e.target.value;
+
+    setText(userInput);
+    const filtered = suggestions.filter(
+      (suggestion) =>
+        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+    );
+
+    setFilteredSuggestions(filtered);
+    setIsSuggestionVisible(true);
+    setActiveIndex(0); 
   };
 
   const handleKeyDown = (e) => {
     if (e.code == 'Escape') {
       setText('');
       setIsEditing(false);
+      setIsSuggestionVisible(false); 
       return;
     }
     if (e.code !== 'Enter' && e.code !== 'Space') {
@@ -34,6 +48,43 @@ const TagList = ({ tags, onTagRemove, onTagAdd }) => {
     setIsEditing(false);
   };
 
+  const handleClick = (suggestion) => {
+    console.log("suggestion:" + suggestion)
+    onTagAdd(suggestion);
+    setText('');
+    setIsEditing(false);
+    setFilteredSuggestions([]);
+    setIsSuggestionVisible(false);
+  };
+
+
+  const renderSuggestions = () => {
+    if (isSuggestionVisible && text) {
+      if (filteredSuggestions.length) {
+        return (
+          <ul className="suggestions">
+            {filteredSuggestions.map((suggestion, idx) => (
+              <li
+                key={suggestion}
+                className={idx === activeIndex ? "active" : ""}
+                onClick={() => handleClick(suggestion)}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
+        );
+      } else {
+        return (
+          <div className="no-suggestions">
+            <em>No suggestions available</em>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
   return (
     <StyledWrapper className="flex flex-wrap gap-2 mt-1">
       <ul className="flex flex-wrap gap-1">
@@ -49,14 +100,17 @@ const TagList = ({ tags, onTagRemove, onTagAdd }) => {
           : null}
       </ul>
       {isEditing ? (
-        <input
-          type="text"
-          placeholder="Space or Enter to add tag"
-          value={text}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          autoFocus
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Space or Enter to add tag"
+            value={text}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          {renderSuggestions()}
+        </div>
       ) : (
         <button className="text-link select-none" onClick={() => setIsEditing(true)}>
           + Add

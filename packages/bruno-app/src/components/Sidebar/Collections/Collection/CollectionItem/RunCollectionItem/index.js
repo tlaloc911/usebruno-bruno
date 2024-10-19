@@ -14,7 +14,7 @@ const RunCollectionItem = ({ collection, item, onClose }) => {
 
   const [tags, setTags] = useState({ include: [], exclude: [] });
   const [tagsEnabled, setTagsEnabled] = useState(false);
-  const [totalRequestsInCollection, tagListsCollection ] = getRequestsInfoInCollection (item);
+  const [totalRequestsInCollection, tagListsCollection] = getRequestsInfoInCollection(item);
 
   const onSubmit = (recursive) => {
     dispatch(
@@ -55,9 +55,6 @@ const RunCollectionItem = ({ collection, item, onClose }) => {
               <span className="ml-1 text-xs">({recursiveRunLength} requests)</span>
             </div>
             <div className="mb-8">This will run all the requests in this folder and all its subfolders.</div>
-            <div className="mb-8">
-              Tags in your folder: <span className="font-medium">{tagListsCollection.join(',')}</span>
-            </div>
             <div className="mb-8 flex flex-col">
               <div className="flex gap-2">
                 <label className="block font-medium">Filter requests with tags</label>
@@ -69,24 +66,31 @@ const RunCollectionItem = ({ collection, item, onClose }) => {
                 />
               </div>
               {tagsEnabled && (
-                <div className="flex p-4 gap-4 max-w-xl justify-between">
-                  <div className="w-1/2">
-                    <span>Included tags:</span>
-                    <TagList
-                      tags={tags.include}
-                      onTagAdd={(tag) => setTags({ ...tags, include: [...tags.include, tag] })}
-                      onTagRemove={(tag) => setTags({ ...tags, include: tags.include.filter((t) => t !== tag) })}
-                    />
+                  <div>
+                    <div className="mb-8">
+                      Tags in your folder: <span className="font-medium">{tagListsCollection.join(',')}</span>
+                    </div>
+                    <div className="flex p-4 gap-4 max-w-xl justify-between">
+                      <div className="w-1/2">
+                        <span>Included tags:</span>
+                        <TagList
+                          tags={tags.include}
+                          onTagAdd={(tag) => setTags({ ...tags, include: [...tags.include, tag] })}
+                          onTagRemove={(tag) => setTags({ ...tags, include: tags.include.filter((t) => t !== tag) })}
+                          suggestions={tagListsCollection}
+                        />
+                      </div>
+                      <div className="w-1/2">
+                        <span>Excluded tags:</span>
+                        <TagList
+                          tags={tags.exclude}
+                          onTagAdd={(tag) => setTags({ ...tags, exclude: [...tags.exclude, tag] })}
+                          onTagRemove={(tag) => setTags({ ...tags, exclude: tags.exclude.filter((t) => t !== tag) })}
+                          suggestions={tagListsCollection}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-1/2">
-                    <span>Excluded tags:</span>
-                    <TagList
-                      tags={tags.exclude}
-                      onTagAdd={(tag) => setTags({ ...tags, exclude: [...tags.exclude, tag] })}
-                      onTagRemove={(tag) => setTags({ ...tags, exclude: tags.exclude.filter((t) => t !== tag) })}
-                    />
-                  </div>
-                </div>
               )}
             </div>
 
